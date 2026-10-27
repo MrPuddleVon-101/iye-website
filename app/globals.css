@@ -624,8 +624,7 @@ html:not(.has-cursor) .cursor {
   z-index: 3;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 18px;
+  gap: 14px;
   height: var(--strip-h);
   padding: 0 var(--pad);
   overflow: hidden;
@@ -635,14 +634,57 @@ html:not(.has-cursor) .cursor {
   font-weight: 650;
   transition: height 0.6s var(--ease-io);
 }
+.nav__tag {
+  flex: none;
+  padding: 3px 9px;
+  background: var(--ink);
+  color: var(--lime);
+  font-size: 12px;
+  font-weight: 800;
+  font-stretch: 112%;
+}
+.nav__strip p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .nav__strip a {
+  position: relative;
+  flex: none;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  padding: 0 18px;
+  margin-right: calc(var(--pad) * -1);
+  background: var(--ink);
+  color: var(--paper);
   font-weight: 800;
   font-stretch: 112%;
   text-decoration: none;
-  border-bottom: 2px solid currentColor;
+  isolation: isolate;
+  overflow: hidden;
 }
-.nav__strip a:hover {
-  border-bottom-color: transparent;
+.nav__strip a::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--navy);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-io);
+}
+.nav__strip a:hover::before {
+  transform: scaleX(1);
+}
+.nav__strip a span {
+  color: var(--lime);
+  transition: transform 0.4s var(--ease);
+}
+.nav__strip a:hover span {
+  transform: translateX(4px);
 }
 .nav.is-folded .nav__strip {
   height: 0;

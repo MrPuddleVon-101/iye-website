@@ -143,7 +143,7 @@ export function Loader() {
         </svg>
         <p className="loader__name">
           Institute of Young Economists
-          <span>Where supply meets demand, in the room.</span>
+          <span>Est. 2026 at St. Joseph&apos;s Institution International</span>
         </p>
       </div>
       <p className="loader__foot">

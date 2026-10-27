@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { metrics } from '@/content/impact';
@@ -11,7 +11,9 @@ import { onReady, prefersReducedMotion } from '@/lib/motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const LINES = ['The economy', 'is already', 'in the room.'];
+const LINES = ['The economy', 'is already', 'in the'];
+// The last word cycles through places economics is already happening.
+const PLACES = ['room.', 'canteen.', 'group chat.', 'bubble tea queue.', 'exam hall.', 'stock app.'];
 const VERBS = ['Debate.', 'Model.', 'Critique.', 'Apply.'];
 
 /**
@@ -21,6 +23,21 @@ const VERBS = ['Debate.', 'Model.', 'Critique.', 'Apply.'];
  */
 export function Room() {
   const ref = useRef<HTMLElement>(null);
+  const [place, setPlace] = useState(0);
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    let id = 0;
+    const off = onReady(() => {
+      id = window.setInterval(() => {
+        if (window.scrollY < window.innerHeight * 0.3) setPlace((p) => (p + 1) % PLACES.length);
+      }, 2300);
+    });
+    return () => {
+      off();
+      clearInterval(id);
+    };
+  }, []);
 
   useEffect(() => {
     const root = ref.current;
@@ -54,8 +71,6 @@ export function Room() {
         .to(q('.room__photo img'), { scale: 1.18, duration: 1.8, ease: 'expo.out' }, 0.2)
         .from(q('.room__line > span'), { yPercent: 110, skewY: 6, duration: 1.1, stagger: 0.09, ease: 'expo.out' }, 0.15)
         .from(q('.room__ctas, .room__stat, .room__scroll'), { y: 24, opacity: 0, duration: 0.9, stagger: 0.07, ease: 'power3.out' }, 0.6)
-        .fromTo(q('.room__curves'), { clipPath: 'inset(0% 100% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.8, ease: 'expo.inOut' }, 0.1)
-        .from(q('.room__e'), { scale: 0, opacity: 0, transformOrigin: '50% 50%', duration: 0.6, ease: 'back.out(3)' }, 1.3)
         .fromTo(q('.room__tile'), { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.1, ease: 'expo.inOut' }, 0.8);
       const off = onReady(() => {
         intro.play();
@@ -72,7 +87,6 @@ export function Room() {
         // letting the scrub record them mid-entrance would lock in a blank state.
         .fromTo(q('.room__line'), { xPercent: 0, opacity: 1 }, { xPercent: (i) => [-60, 45, -50][i], opacity: 0, ease: 'power2.in', duration: 0.4, stagger: 0.03, immediateRender: false }, 0)
         .fromTo(q('.room__ctas, .room__stats, .room__scroll'), { y: 0, opacity: 1 }, { y: 40, opacity: 0, ease: 'power2.in', duration: 0.25, immediateRender: false }, 0)
-        .fromTo(q('.room__curves, .room__e'), { opacity: 1 }, { opacity: 0, duration: 0.25, immediateRender: false }, 0)
         .fromTo(q('.room__tile'), { yPercent: 0, opacity: 1 }, { yPercent: -60, opacity: 0, ease: 'power2.in', duration: 0.3, immediateRender: false }, 0)
         .fromTo(q('.room__shade'), { opacity: 0 }, { opacity: 1, duration: 0.3, immediateRender: false }, 0.35)
         .from(q('.room__verb > span'), { yPercent: 110, duration: 0.18, stagger: 0.09, ease: 'power3.out' }, 0.5)
@@ -107,14 +121,6 @@ export function Room() {
   return (
     <section className="room" ref={ref} aria-labelledby="room-h">
       <div className="room__stage">
-        {/* The loader's supply and demand curves carry on behind the landing. */}
-        <svg className="room__curves" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden>
-          <path className="room__s" d="M-20 900 Q 520 760, 735 600 T 1460 80" />
-          <path className="room__d" d="M360 -20 Q 560 380, 735 600 T 1200 920" />
-        </svg>
-        <span className="room__e" aria-hidden>
-          <i />E
-        </span>
         <figure className="room__photo" data-cursor="Inside">
           <img src={asset(photos.panel.src)} alt={photos.panel.alt} style={{ objectPosition: photos.panel.focal }} />
           <span className="room__shade" aria-hidden />
@@ -141,9 +147,20 @@ export function Room() {
 
         <div className="room__copy">
         <h1 className="room__title" id="room-h">
-          {LINES.map((l) => (
-            <span className="room__line" key={l}>
-              <span>{l}</span>
+          <span className="sr-only">The economy is already in the room.</span>
+          {LINES.map((l, i) => (
+            <span className="room__line" key={l} aria-hidden>
+              <span>
+                {l}
+                {i === LINES.length - 1 && (
+                  <>
+                    {' '}
+                    <span className="room__place" key={place}>
+                      {PLACES[place]}
+                    </span>
+                  </>
+                )}
+              </span>
             </span>
           ))}
         </h1>

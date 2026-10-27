@@ -60,9 +60,10 @@ export function Nav() {
   return (
     <header className={`nav${folded ? ' is-folded' : ''}${open ? ' is-open' : ''}`}>
       <div className="nav__strip" inert={folded}>
-        <p>Econversations are open to every SJII student.</p>
+        <span className="nav__tag">Open to all</span>
+        <p>Econversations are open to anyone who wants to think like an economist.</p>
         <a href={site.joinHref} target="_blank" rel="noopener noreferrer">
-          Join the list <span aria-hidden>↗</span>
+          Pull up a chair <span aria-hidden>→</span>
         </a>
       </div>
       <div className="nav__bar">
