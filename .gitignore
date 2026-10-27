@@ -1,0 +1,8 @@
+node_modules
+.next
+out
+next-env.d.ts
+*.tsbuildinfo
+.claude
+# Unedited originals (one shows a student email); site uses graded copies in public/
+raw

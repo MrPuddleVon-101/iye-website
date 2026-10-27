@@ -1,0 +1,26 @@
+{
+  "name": "iye-website",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Institute of Young Economists: an immersive economics and community site for St. Joseph's Institution International.",
+  "scripts": {
+    "dev": "next dev -p 3222",
+    "build": "next build",
+    "start": "npx serve out -p 3222",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "lenis": "^1.3.26",
+    "next": "^16.3.6",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^5.9.3"
+  }
+}
